@@ -1,12 +1,29 @@
 libtodotxt
 ==========
 
+#Build
+```sh
+mkdir build
+cd build
+cmake .. && make
+```
+To build with tests
+```sh
+mkdir build
+cd build
+cmake -Dbuild_tests=ON .. && make test
+./bin/libtodotxt_test
+```
+
 #Formatting cleifications
 ##Creation date
 Date format
 ```
 YYYY-MM-DD
 ```
+
+Or well technically `[0-9]{4}-[0-9]{2}-[0-9]{2}` but the above may become critical in the future.
+
 Has creation date
 ```
 2011-03-02 Document +TodoTxt task format

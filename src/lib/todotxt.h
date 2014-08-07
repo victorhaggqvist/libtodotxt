@@ -5,18 +5,20 @@
 #include <vector>
 #include "todoitem.h"
 
-using namespace std;
+namespace Snilius {
 
 class Todotxt {
   private:
-    typedef vector<TodoItem> TodoList;
-    TodoList list;
-    string path;
+    typedef std::vector<TodoItem> todoList;
+    todoList list;
+    std::string path;
     void load_file();
 
   public:
-    Todotxt(string path);
-    TodoList getTodoList();
+    Todotxt(std::string path);
+    todoList getTodoList();
 };
+
+}
 
 #endif // TODOTXT_H

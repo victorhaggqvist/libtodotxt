@@ -4,6 +4,7 @@
 #include <cstring>
 
 using namespace std;
+using namespace Snilius;
 
 void Todotxt::load_file() {
 

@@ -309,7 +309,7 @@ TEST(TodoItem, setTodo){
   EXPECT_EQ("stuff n other stuff", item.AssembleTodo());
 }
 
-int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+//int main(int argc, char **argv) {
+//    testing::InitGoogleTest(&argc, argv);
+//    return RUN_ALL_TESTS();
+//}
