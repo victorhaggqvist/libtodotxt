@@ -1,7 +1,7 @@
 project(libtodotxt)
 cmake_minimum_required(VERSION 2.8)
-#option(build_tests "Build unittests." OFF)
-option(build_tests "Build unittests." ON)
+option(build_tests "Build unittests." OFF)
+#option(build_tests "Build unittests." ON)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 add_subdirectory(src)
 
