@@ -31,6 +31,8 @@ namespace Snilius {
       };
 
       TodoItem(const std::string &todoLine);
+//      TodoItem(const TodoItem &obj);
+      TodoItem &operator=(const TodoItem &obj);
       bool IsDone();
       std::string GetPriority();
       std::string GetDateCreation();
@@ -46,6 +48,7 @@ namespace Snilius {
       void SetDateCreation(std::string creationDate);
       void SetDateDone(std::string doneDate);
       void SetTodo(std::string todoLine);
+      void NotifyChange();
   };
 
 }

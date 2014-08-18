@@ -10,6 +10,17 @@ TodoItem::TodoItem(const std::string &todo_line) {
   DecodeLine();
 }
 
+TodoItem &TodoItem::operator=(const TodoItem &obj)
+{
+  TodoItem *it = new TodoItem(obj.raw_line);
+  return *it;
+}
+
+//TodoItem::TodoItem(const TodoItem &obj) {
+//  raw_line = obj.AssembleTodo();
+//  DecodeLine();
+//}
+
 /**
  * Initial decoding of the todo-line
  * @brief TodoItem::DecodeLine
@@ -235,4 +246,9 @@ void TodoItem::SetDateDone(std::string doneDate) {
 
 void TodoItem::SetTodo(std::string todoLine) {
   _todo = todoLine;
+}
+
+void TodoItem::NotifyChange(){
+  raw_line = this->AssembleTodo();
+  DecodeLine();
 }

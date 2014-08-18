@@ -8,20 +8,26 @@
 using namespace Snilius;
 
 void Todotxt::load_file() {
+  std::string pathToFile = path + TODO_FILE_W_SEPARATOR;
 
-  const char *fileName = strcat(&path[0], TODO_FILE_W_SEPARATOR.c_str());
-
-  std::ifstream todoFile(fileName);
+  std::ifstream todoFile(pathToFile.c_str());
   std::string curline;
   if (todoFile.is_open()) {
     while (getline(todoFile, curline)) {
+      if (curline.length()<1){
+        std::cout<<"empty"<<std::endl;
+        return;
+      }
       TodoItem item(curline);
       todoList.push_back(item);
-//      std::cout << curline << '\n';
     }
     todoFile.close();
   } else {
-    std::cout << "Couldn't open " << fileName << std::endl;
+    std::cout << "Could not open " << pathToFile << std::endl;
+    std::ofstream newFile;
+    newFile.open(pathToFile.c_str(), std::ofstream::out);
+    newFile.close();
+    std::cout << "A new todo.txt created at "<< pathToFile << std::endl;
   }
 }
 
@@ -35,19 +41,19 @@ bool Todotxt::fileExists(std::string& name) {
 }
 
 void Todotxt::saveToFile() {
-  const char *fileName = strcat(&path[0], TODO_FILE_W_SEPARATOR.c_str());
+  std::string pathToFile = path + TODO_FILE_W_SEPARATOR;
 
-  std::ofstream todoFile(fileName);
+  std::ofstream todoFile(pathToFile.c_str());
   if (todoFile.is_open()){
-    for (int i = todoList.size(); i > 0; --i){
+    for (int i = 0; i < todoList.size(); ++i){
       TodoItem item = todoList.at(i);
       std::string raw = item.AssembleTodo();
       todoFile << raw << std::endl;
     }
-    std::cout << "saved"<< std::endl;
     todoFile.close();
+    std::cout << "Saved to file"<< std::endl;
   }else {
-    std::cout << "failed save to file" << std::endl;
+    std::cout << "Failed save to file" << std::endl;
   }
 }
 
@@ -64,8 +70,16 @@ std::vector<TodoItem> Todotxt::getTodoList(){
   return todoList;
 }
 
-void Todotxt::updateItem(int index, TodoItem& item){
-
+void Todotxt::updateItem(int index, TodoItem *item){
+//  std::vector<TodoItem>::iterator it = todoList.begin();
+//  it += index;
+//  TodoItem *toReplace = &(*it);
+  TodoItem tmp(item->AssembleTodo());
+//  toReplace = &tmp;
+  todoList[index] = tmp;
+//  TodoItem* tmp = item;
+//  todoList.assign(index, (const TodoItem item));
+//  todoList[index] = item;
 }
 
 void Todotxt::newItem(TodoItem& item){

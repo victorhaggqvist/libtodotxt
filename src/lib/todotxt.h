@@ -8,13 +8,14 @@
 
 namespace Snilius {
 
-class Todotxt : public TodotxtManager{
+//class Todotxt : public TodotxtManager{
+class Todotxt {
   public:
 //    typedef std::vector<TodoItem> todoList;
     Todotxt(std::string path);
     ~Todotxt(){}
     std::vector<TodoItem> getTodoList();
-    void updateItem(int index, TodoItem& item);
+    void updateItem(int index, TodoItem* item);
     void newItem(TodoItem& item);
     void removeItem(int index);
     void removeItem(TodoItem& item);
