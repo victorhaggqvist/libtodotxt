@@ -16,7 +16,14 @@ INCLUDE_DIRECTORIES(../src/lib)
 #INCLUDE_DIRECTORIES(${GTEST_SOURCE_DIR}/include)
 #include_directories(${GTEST_INCLUDE_DIRS})
 file(GLOB SRC . *.cpp)
-set(SOURCES ${SRC} ../src/lib/todoitem.cpp ../src/lib/todoitem.h)
+set(LIBSRC
+../src/lib/todotxtmanager.h
+../src/lib/todotxt.cpp
+../src/lib/todotxt.h
+../src/lib/todoitem.cpp
+../src/lib/todoitem.h
+)
+set(SOURCES ${SRC} ${LIBSRC})
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} gtest gtest_main pthread)
 #target_link_libraries(${PROJECT_NAME} ${GTEST_LIBRARIES} pthread ${SRC})

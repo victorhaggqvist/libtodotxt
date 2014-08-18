@@ -3,20 +3,32 @@
 
 #include <string>
 #include <vector>
+#include "todotxtmanager.h"
 #include "todoitem.h"
 
 namespace Snilius {
 
-class Todotxt {
+class Todotxt : public TodotxtManager{
+  public:
+//    typedef std::vector<TodoItem> todoList;
+    Todotxt(std::string path);
+    ~Todotxt(){}
+    std::vector<TodoItem> getTodoList();
+    void updateItem(int index, TodoItem& item);
+    void newItem(TodoItem& item);
+    void removeItem(int index);
+    void removeItem(TodoItem& item);
+    void archiveItem(int index);
+    void archiveItem(TodoItem& item);
+
   private:
-    typedef std::vector<TodoItem> todoList;
-    todoList list;
+    const std::string TODO_FILE = "todo.txt";
+    const std::string TODO_FILE_W_SEPARATOR = "/todo.txt";
+    std::vector<TodoItem> todoList;
     std::string path;
     void load_file();
-
-  public:
-    Todotxt(std::string path);
-    todoList getTodoList();
+    bool fileExists(std::string& file);
+    void saveToFile();
 };
 
 }
