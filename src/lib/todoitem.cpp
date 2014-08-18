@@ -12,8 +12,10 @@ TodoItem::TodoItem(const std::string &todo_line) {
 
 TodoItem &TodoItem::operator=(const TodoItem &obj)
 {
-  TodoItem *it = new TodoItem(obj.raw_line);
-  return *it;
+  this->raw_line = obj.raw_line;
+  this->DecodeLine();
+//  TodoItem *it = new TodoItem(obj.raw_line);
+  return *this;
 }
 
 //TodoItem::TodoItem(const TodoItem &obj) {
