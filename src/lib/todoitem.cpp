@@ -5,13 +5,14 @@
 
 using namespace Snilius;
 
-TodoItem::TodoItem(const std::string &todo_line) {
-  raw_line = todo_line;
-  DecodeLine();
+TodoItem::TodoItem(const std::string &todo_line) :
+  raw_line(todo_line)
+{
 }
 
-TodoItem &TodoItem::operator=(const TodoItem &obj)
-{
+TodoItem &TodoItem::operator=(const TodoItem &obj) {
+//  TodoItem item = TodoItem::init(&obj.raw_line);
+//  this = &item;
   this->raw_line = obj.raw_line;
   this->DecodeLine();
 //  TodoItem *it = new TodoItem(obj.raw_line);
@@ -214,7 +215,7 @@ std::string TodoItem::GetKeyValue(std::string key) {
   return "";
 }
 
-std::string TodoItem::AssembleTodo() {
+std::string TodoItem::AssembleTodo() const {
   std::string bakedTodo;
 
   if (_done) bakedTodo = "x ";
@@ -253,4 +254,11 @@ void TodoItem::SetTodo(std::string todoLine) {
 void TodoItem::NotifyChange(){
   raw_line = this->AssembleTodo();
   DecodeLine();
+}
+
+TodoItem TodoItem::init(const std::string &todoLine)
+{
+  TodoItem item(todoLine);
+  item.DecodeLine();
+  return item;
 }

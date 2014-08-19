@@ -18,7 +18,7 @@ void Todotxt::load_file() {
         std::cout<<"empty"<<std::endl;
         return;
       }
-      TodoItem item(curline);
+      TodoItem item = TodoItem::init(curline);
       todoList.push_back(item);
     }
     todoFile.close();
@@ -74,9 +74,10 @@ void Todotxt::updateItem(int index, TodoItem *item){
 //  std::vector<TodoItem>::iterator it = todoList.begin();
 //  it += index;
 //  TodoItem *toReplace = &(*it);
-  TodoItem tmp(item->AssembleTodo());
+//  TodoItem tmp(item->AssembleTodo());
 //  toReplace = &tmp;
-  todoList[index] = tmp;
+//  const std::string &assLine = item->AssembleTodo();
+  todoList[index] = TodoItem::init(item->AssembleTodo());
 //  TodoItem* tmp = item;
 //  todoList.assign(index, (const TodoItem item));
 //  todoList[index] = item;
