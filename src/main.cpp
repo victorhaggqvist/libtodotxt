@@ -15,9 +15,18 @@ int main() {
   int getIndex = 0;
   TodoItem item = list[getIndex];
   item.SetDone(true);
-  todo->updateItem(0, &item);
+  todo->updateItem(0, item);
   vector<TodoItem> olist = todo->getTodoList();
-  cout<<"";
+
+  TodoItem kl = TodoItem::init("x wodo");
+  todo->newItem(kl);
+  TodoItem kdl = TodoItem::init("muuuu");
+  todo->newItem(kdl);
+  TodoItem kdld = TodoItem::init("muuuu");
+  todo->newItem(kdld);
+  todo->removeItem(1);
+  vector<TodoItem> olistd = todo->getTodoList();
+  cout<<  "";
 //  item.NotifyChange();
 
 //  TodoItem qw = list.at(0);

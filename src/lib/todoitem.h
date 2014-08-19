@@ -23,10 +23,13 @@ namespace Snilius {
 
     public:
       TodoItem(const std::string &todoLine);
-      TodoItem &operator=(const TodoItem &obj);
-      bool _done;
-      std::string _todo, _dateCreation, _dateDone, _priority;
-      std::vector<std::string> _contexts, _projects;
+      TodoItem &operator = (const TodoItem &obj);
+      TodoItem static init(const std::string &todoLine);
+      bool operator == (const TodoItem &obj);
+//      TodoItem(const TodoItem &obj);
+      bool done_;
+      std::string todo_, dateCreation_, dateDone_, priority_;
+      std::vector<std::string> contexts_, projects_;
       struct ItemKVPair_t{
           std::string key;
           std::string value;
@@ -47,8 +50,6 @@ namespace Snilius {
       void SetDateCreation(std::string creationDate);
       void SetDateDone(std::string doneDate);
       void SetTodo(std::string todoLine);
-      void NotifyChange();
-      TodoItem static init(const std::string &todoLine);
   };
 
 }

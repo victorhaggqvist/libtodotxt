@@ -120,17 +120,17 @@ TEST(TodoItem, getTodo){
 TEST(TodoItem, decodeLine){
   TodoItem item = TodoItem::init("(A) Call Mom +Family +PeaceLoveAndHappiness @iphone @phone");
 
-  EXPECT_EQ("A", item._priority);
+  EXPECT_EQ("A", item.priority_);
 
-  EXPECT_FALSE(item._done);
+  EXPECT_FALSE(item.done_);
 
   vector<string> contexts = {"@iphone", "@phone"};
-  EXPECT_EQ(contexts, item._contexts);
+  EXPECT_EQ(contexts, item.contexts_);
 
   vector<string> projects = {"+Family", "+PeaceLoveAndHappiness"};
-  EXPECT_EQ(projects, item._projects);
+  EXPECT_EQ(projects, item.projects_);
 
-  EXPECT_EQ("Call Mom +Family +PeaceLoveAndHappiness @iphone @phone", item._todo);
+  EXPECT_EQ("Call Mom +Family +PeaceLoveAndHappiness @iphone @phone", item.todo_);
 
 
   TodoItem item2 = TodoItem::init("x (A) 2014-08-06 Call Mom +Family +PeaceLoveAndHappiness @iphone @phone");

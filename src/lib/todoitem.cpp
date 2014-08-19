@@ -11,16 +11,29 @@ TodoItem::TodoItem(const std::string &todo_line) :
 }
 
 TodoItem &TodoItem::operator=(const TodoItem &obj) {
-//  TodoItem item = TodoItem::init(&obj.raw_line);
-//  this = &item;
-  this->raw_line = obj.raw_line;
-  this->DecodeLine();
-//  TodoItem *it = new TodoItem(obj.raw_line);
+//  this->raw_line = obj.raw_line;
+  this->done_ = obj.done_;
+  this->priority_ = obj.priority_;
+  this->dateDone_ = obj.dateDone_;
+  this->dateCreation_ = obj.dateCreation_;
+  this->contexts_ = obj.contexts_;
+  this->projects_ = obj.projects_;
   return *this;
 }
 
-//TodoItem::TodoItem(const TodoItem &obj) {
-//  raw_line = obj.AssembleTodo();
+TodoItem TodoItem::init(const std::string &todoLine) {
+  TodoItem item(todoLine);
+  item.DecodeLine();
+  return item;
+}
+
+bool TodoItem::operator ==(const TodoItem &obj) {
+  return this->AssembleTodo() == obj.AssembleTodo();
+}
+
+//TodoItem::TodoItem(const TodoItem &obj) :
+//  raw_line(obj.AssembleTodo())
+//{
 //  DecodeLine();
 //}
 
@@ -29,13 +42,13 @@ TodoItem &TodoItem::operator=(const TodoItem &obj) {
  * @brief TodoItem::DecodeLine
  */
 void TodoItem::DecodeLine() {
-  _done = IsDone();
-  if (GetPriority().length() > 0) _priority = GetPriority();
-  if (GetDateDone().length() > 0) _dateDone = GetDateDone();
-  if (GetDateCreation().length() > 0) _dateCreation = GetDateCreation();
-  if (GetContexts().size()>0) _contexts = GetContexts();
-  if (GetProjects().size()>0) _projects = GetProjects();
-  _todo = GetTodo();
+  done_ = IsDone();
+  if (GetPriority().length() > 0) priority_ = GetPriority();
+  if (GetDateDone().length() > 0) dateDone_ = GetDateDone();
+  if (GetDateCreation().length() > 0) dateCreation_ = GetDateCreation();
+  if (GetContexts().size()>0) contexts_ = GetContexts();
+  if (GetProjects().size()>0) projects_ = GetProjects();
+  todo_ = GetTodo();
 }
 
 /**
@@ -48,10 +61,10 @@ std::deque<std::string> TodoItem::RegexFind(std::string pattern) {
   int cutPos = 0;
   std::deque<std::string> findings;
 
-  if (_done) cutPos += PADDING_DONE;
-  if (_priority.length() > 0) cutPos += PADDING_PRIORITY;
-  if (_dateCreation.length() > 0) cutPos += PADDING_DATE;
-  if (_dateDone.length() > 0) cutPos += PADDING_DATE;
+  if (done_) cutPos += PADDING_DONE;
+  if (priority_.length() > 0) cutPos += PADDING_PRIORITY;
+  if (dateCreation_.length() > 0) cutPos += PADDING_DATE;
+  if (dateDone_.length() > 0) cutPos += PADDING_DATE;
 
   std::string search_string = raw_line.substr(cutPos, raw_line.length());
 
@@ -88,7 +101,7 @@ bool TodoItem::IsDone(){
 std::string TodoItem::GetPriority() {
   int priority_start = 0;
 
-  if (_done) priority_start = 2;
+  if (done_) priority_start = 2;
 
   if (raw_line.substr(priority_start, 1) == "(" &&
       raw_line.substr(priority_start + 2, 1) == ")" &&
@@ -108,9 +121,9 @@ std::string TodoItem::GetPriority() {
 std::string TodoItem::GetDateCreation() {
   int start_pos = 0;
 
-  if (_done) start_pos += PADDING_DONE;
-  if (_priority.length() > 0) start_pos += PADDING_PRIORITY;
-  if (_dateDone.length() > 0) start_pos += PADDING_DATE;
+  if (done_) start_pos += PADDING_DONE;
+  if (priority_.length() > 0) start_pos += PADDING_PRIORITY;
+  if (dateDone_.length() > 0) start_pos += PADDING_DATE;
 
   std::string possible_date = raw_line.length()< start_pos + 10?"":raw_line.substr(start_pos, 10);
   if (regex_match(possible_date, std::regex(REGEX_DATE)) && raw_line.substr(start_pos+10, 1) == " ")
@@ -124,10 +137,10 @@ std::string TodoItem::GetDateCreation() {
  * @return std::string done date or empty string
  */
 std::string TodoItem::GetDateDone() {
-  if (!_done) return "";
+  if (!done_) return "";
 
   int start_pos = PADDING_DONE;
-  if (_priority.length() > 0) start_pos += PADDING_PRIORITY;
+  if (priority_.length() > 0) start_pos += PADDING_PRIORITY;
 
   std::string possible_date = raw_line.length() < start_pos + 10 ? "" : raw_line.substr(start_pos, 10);
   if (regex_match(possible_date, std::regex(REGEX_DATE)) &&
@@ -162,14 +175,14 @@ std::vector<std::string> TodoItem::GetProjects() {
 }
 
 std::string TodoItem::GetTodo() {
-  int partsToStripOf = _contexts.size();
-  partsToStripOf += _projects.size();
+  int partsToStripOf = contexts_.size();
+  partsToStripOf += projects_.size();
 
   int startPos = 0;
-  if (_done) startPos += 2;
-  if (_dateDone.length() > 0) startPos += 11;
-  if (_dateCreation.length() > 0) startPos += 11;
-  if (_priority.length() > 0) startPos += 4;
+  if (done_) startPos += 2;
+  if (dateDone_.length() > 0) startPos += 11;
+  if (dateCreation_.length() > 0) startPos += 11;
+  if (priority_.length() > 0) startPos += 4;
 
   std::string line = raw_line.substr(startPos, raw_line.length());
 
@@ -218,47 +231,35 @@ std::string TodoItem::GetKeyValue(std::string key) {
 std::string TodoItem::AssembleTodo() const {
   std::string bakedTodo;
 
-  if (_done) bakedTodo = "x ";
-  if (_priority.length()>0) bakedTodo += "("+ _priority+") ";
-  if (_dateDone.length()>0) bakedTodo += _dateDone+" ";
-  if (_dateCreation.length()>0) bakedTodo += _dateCreation+" ";
-  bakedTodo += _todo;
+  if (done_) bakedTodo = "x ";
+  if (priority_.length()>0) bakedTodo += "("+ priority_+") ";
+  if (dateDone_.length()>0) bakedTodo += dateDone_+" ";
+  if (dateCreation_.length()>0) bakedTodo += dateCreation_+" ";
+  bakedTodo += todo_;
 
   return bakedTodo;
 }
 
 void TodoItem::SetDone(bool isDone) {
-  _done = isDone;
+  done_ = isDone;
 }
 
 void TodoItem::SetPriority(std::string priority) {
-  _priority = priority;
+  priority_ = priority;
 }
 
 void TodoItem::SetDateCreation(std::string creationDate) {
   if (creationDate.length() > 0 && !regex_match(creationDate, std::regex(REGEX_DATE)))
     throw std::invalid_argument("Invalid date format, should be YYYY-MM-DD");
-  _dateCreation = creationDate;
+  dateCreation_ = creationDate;
 }
 
 void TodoItem::SetDateDone(std::string doneDate) {
   if (doneDate.length() > 0 && !regex_match(doneDate, std::regex(REGEX_DATE)))
     throw std::invalid_argument("Invalid date format, should be YYYY-MM-DD");
-  _dateDone = doneDate;
+  dateDone_ = doneDate;
 }
 
 void TodoItem::SetTodo(std::string todoLine) {
-  _todo = todoLine;
-}
-
-void TodoItem::NotifyChange(){
-  raw_line = this->AssembleTodo();
-  DecodeLine();
-}
-
-TodoItem TodoItem::init(const std::string &todoLine)
-{
-  TodoItem item(todoLine);
-  item.DecodeLine();
-  return item;
+  todo_ = todoLine;
 }
