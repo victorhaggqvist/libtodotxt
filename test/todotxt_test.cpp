@@ -3,10 +3,10 @@
 #include "todotxt.h"
 
 #include <string>
-#include <vector>
+#include <deque>
 #include <fstream>
+#include <memory>
 
-using namespace std;
 using namespace Snilius;
 
 /**
@@ -17,37 +17,36 @@ using namespace Snilius;
  */
 
 TEST(Todotxt, createObject) {
-  string base = ".";
-  Todotxt *todo = new Todotxt(base);
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
 }
 
 TEST(Todotxt, createObjectWithExistingTodofile) {
   system("bash -c 'touch ./todo.txt'");
-  Todotxt *todo = new Todotxt(".");
-  vector<TodoItem> list = todo->getTodoList();
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  std::deque<TodoItem> list = todo->getTodoList();
   ASSERT_TRUE(list.size()>=0);
 }
 
 TEST(Todotxt, createObjectWithNoTodofile){
   system("bash -c 'rm ./todo.txt'");
-  Todotxt *todo = new Todotxt(".");
-  ifstream fooFile("./todo.txt");
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  std::ifstream fooFile("./todo.txt");
   ASSERT_TRUE(fooFile.is_open());
 }
 
 TEST(Todotxt, newItem){
   system("bash -c 'echo a_item > ./todo.txt'");
-  Todotxt *todo = new Todotxt(".");
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
   TodoItem item = TodoItem::init("next do");
   todo->newItem(item);
-  vector<TodoItem> list = todo->getTodoList();
+  std::deque<TodoItem> list = todo->getTodoList();
   ASSERT_TRUE(list.size()==2);
 }
 
 TEST(Todotxt, updateItem){
   system("bash -c 'echo a_item > ./todo.txt'");
-  Todotxt *todo = new Todotxt(".");
-  vector<TodoItem> list = todo->getTodoList();
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  std::deque<TodoItem> list = todo->getTodoList();
 
   int getIndex = 0;
   TodoItem item = list.at(getIndex);
@@ -61,8 +60,8 @@ TEST(Todotxt, updateItem){
 
 TEST(Todotxt, updateItem2){
   system("bash -c 'echo a_item > ./todo.txt'");
-  Todotxt *todo = new Todotxt(".");
-  vector<TodoItem> list = todo->getTodoList();
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  std::deque<TodoItem> list = todo->getTodoList();
 
   int getIndex = 0;
   TodoItem item = list[getIndex];
@@ -82,23 +81,84 @@ TEST(Todotxt, removeItemIndex){
   system("bash -c 'echo a_item_2 >> ./todo.txt'");
   system("bash -c 'echo unicorn >> ./todo.txt'");
 
-  Todotxt *todo = new Todotxt(".");
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
   todo->removeItem(1);
 
-  vector<TodoItem> list = todo->getTodoList();
-  TodoItem item = list[0];
+  std::deque<TodoItem> list = todo->getTodoList();
+  TodoItem item = list[1];
   ASSERT_EQ("a_item_2", item.todo_);
 }
 
-//TEST(Todotxt, removeItemObject){
-//  FAIL();
-//}
+TEST(Todotxt, removeItemObject){
+  system("bash -c 'echo a_item > ./todo.txt'");
+  system("bash -c 'echo pony >> ./todo.txt'");
+  system("bash -c 'echo a_item_2 >> ./todo.txt'");
+  system("bash -c 'echo unicorn >> ./todo.txt'");
 
-//TEST(Todotxt, archiveItemIndex){
-//  FAIL();
-//}
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  TodoItem toRemove = todo->getTodoList()[1];
+  todo->removeItem(toRemove);
 
-//TEST(Todotxt, archiveItemObject){
-//  FAIL();
-//}
+  std::deque<TodoItem> list = todo->getTodoList();
+  TodoItem item = list[1];
+  ASSERT_EQ("a_item_2", item.todo_);
+}
+
+TEST(Todotxt, archiveDoneItems){
+  system("bash -c 'rm ./archive.txt'");
+  system("bash -c 'echo a_item > ./todo.txt'");
+  system("bash -c 'echo x pony >> ./todo.txt'");
+  system("bash -c 'echo a_item_2 >> ./todo.txt'");
+  system("bash -c 'echo unicorn >> ./todo.txt'");
+
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  todo->archiveDoneItems();
+
+  std::deque<TodoItem> nonDone = todo->getTodoList();
+  ASSERT_EQ(3, nonDone.size());
+
+  std::ifstream arfile("./archive.txt");
+  std::string line;
+  getline(arfile, line);
+  ASSERT_EQ("x pony", line);
+}
+
+TEST(Todotxt, archiveItemIndex){
+  system("bash -c 'rm ./archive.txt'");
+  system("bash -c 'echo a_item > ./todo.txt'");
+  system("bash -c 'echo x pony >> ./todo.txt'");
+  system("bash -c 'echo a_item_2 >> ./todo.txt'");
+  system("bash -c 'echo unicorn >> ./todo.txt'");
+
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  todo->archiveItem(1);
+
+  std::deque<TodoItem> nonDone = todo->getTodoList();
+  ASSERT_EQ(3, nonDone.size());
+
+  std::ifstream arfile("./archive.txt");
+  std::string line;
+  getline(arfile, line);
+  ASSERT_EQ("x pony", line);
+}
+
+TEST(Todotxt, archiveItemObject){
+  system("bash -c 'rm ./archive.txt'");
+  system("bash -c 'echo a_item > ./todo.txt'");
+  system("bash -c 'echo x pony >> ./todo.txt'");
+  system("bash -c 'echo a_item_2 >> ./todo.txt'");
+  system("bash -c 'echo unicorn >> ./todo.txt'");
+
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  TodoItem toArchive = todo->getTodoList()[2];
+  todo->archiveItem(toArchive);
+
+  std::deque<TodoItem> nonDone = todo->getTodoList();
+  ASSERT_EQ(3, nonDone.size());
+
+  std::ifstream arfile("./archive.txt");
+  std::string line;
+  getline(arfile, line);
+  ASSERT_EQ("a_item_2", line);
+}
 
