@@ -1,31 +1,41 @@
 #include <iostream>
 #include <string>
+#include <memory>
 #include "todotxt.h"
 #include "todoitem.h"
 #include <todotxtmanager.h>
+#include <deque>
+#include "todotxtgit.h"
 
 using namespace std;
 using namespace Snilius;
 
 int main() {
   system("bash -c 'echo a_item > ./todo.txt'");
-  Todotxt *todo = new Todotxt(".");
-  vector<TodoItem> list = todo->getTodoList();
+  system("bash -c 'echo a_item2 >> ./todo.txt'");
+  system("bash -c 'echo a_item3 >> ./todo.txt'");
+  system("bash -c 'echo a_item4 >> ./todo.txt'");
+  std::shared_ptr<Todotxtgit>todo(new Todotxtgit("."));
+  std::deque<TodoItem> list = todo->getTodoList();
+  TodoItem item =  list[2];
+  item.SetPriority("A");
+  todo->updateItem(2, item);
 
-  int getIndex = 0;
-  TodoItem item = list[getIndex];
-  item.SetDone(true);
-  todo->updateItem(0, item);
-  vector<TodoItem> olist = todo->getTodoList();
 
-  TodoItem kl = TodoItem::init("x wodo");
-  todo->newItem(kl);
-  TodoItem kdl = TodoItem::init("muuuu");
-  todo->newItem(kdl);
-  TodoItem kdld = TodoItem::init("muuuu");
-  todo->newItem(kdld);
-  todo->removeItem(1);
-  vector<TodoItem> olistd = todo->getTodoList();
+//  int getIndex = 0;
+//  TodoItem item = list[getIndex];
+//  item.SetDone(true);
+//  todo->updateItem(0, item);
+//  vector<TodoItem> olist = todo->getTodoList();
+
+//  TodoItem kl = TodoItem::init("x wodo");
+//  todo->newItem(kl);
+//  TodoItem kdl = TodoItem::init("muuuu");
+//  todo->newItem(kdl);
+//  TodoItem kdld = TodoItem::init("muuuu");
+//  todo->newItem(kdld);
+//  todo->removeItem(1);
+//  vector<TodoItem> olistd = todo->getTodoList();
   cout<<  "";
 //  item.NotifyChange();
 
