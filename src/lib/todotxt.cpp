@@ -1,5 +1,5 @@
 #include <fstream>
-
+#include <deque>
 #include <iostream>
 #include <cstring>
 #include "todotxt.h"
@@ -83,8 +83,8 @@ void Todotxt::log(const std::string msg){
  * @param doneItems
  * @param leftItems
  */
-void Todotxt::findDoneItems(std::vector<TodoItem> *doneItems, std::vector<TodoItem> *leftItems) {
-  for (int i = 0; i > todoList_.size(); ++i){
+void Todotxt::findDoneItems(std::deque<TodoItem> *doneItems, std::deque<TodoItem> *leftItems) {
+  for (int i = 0; i < todoList_.size(); ++i){
     TodoItem item = todoList_[i];
     if (item.done_)
       doneItems->push_back(item);
@@ -98,7 +98,7 @@ void Todotxt::findDoneItems(std::vector<TodoItem> *doneItems, std::vector<TodoIt
  * @brief Todotxt::archiveItems
  * @param items
  */
-void Todotxt::archiveItems(const std::vector<TodoItem> &items) {
+void Todotxt::archiveItems(const std::deque<TodoItem> &items) {
   std::string archiveFile = path_ + ARCHIVE_FILE_W_SEPARATOR;
 
   std::ofstream file;
@@ -119,7 +119,7 @@ void Todotxt::archiveItems(const std::vector<TodoItem> &items) {
  * @brief Todotxt::getTodoList
  * @return
  */
-std::vector<TodoItem> Todotxt::getTodoList(){
+std::deque<TodoItem> Todotxt::getTodoList(){
   return todoList_;
 }
 /**
@@ -154,14 +154,13 @@ void Todotxt::newItem(TodoItem& item){
 * @param index
 */
 void Todotxt::removeItem(int index){
-  std::swap(todoList_[index], todoList_.back());
-//  todoList_[index] = std::move(todoList_.back());
-  todoList_.pop_back();
+  todoList_.erase(todoList_.begin()+index);
   saveToFile();
+  log("Item removed");
 }
 
 void Todotxt::removeItem(TodoItem& item) {
-  for (int i = 0; i > todoList_.size(); ++i){
+  for (int i = 0; i < todoList_.size(); ++i){
     if (todoList_[i] == item){
       removeItem(i);
       return;
@@ -174,9 +173,34 @@ void Todotxt::removeItem(TodoItem& item) {
  * @brief Todotxt::archiveDoneItems
  */
 void Todotxt::archiveDoneItems() {
-  std::vector<TodoItem> done;
-  std::vector<TodoItem> left;
+  std::deque<TodoItem> done;
+  std::deque<TodoItem> left;
   findDoneItems(&done, &left);
   todoList_ = left;
   archiveItems(done);
+}
+
+void Todotxt::archiveItem(int index) {
+  TodoItem item = todoList_[index];
+  std::string archiveFile = path_ + ARCHIVE_FILE_W_SEPARATOR;
+
+  std::ofstream file;
+  file.open(archiveFile.c_str(), std::ofstream::out);
+  if (file.is_open()){
+    file << item.AssembleTodo();
+    file.close();
+    todoList_.erase(todoList_.begin()+index);
+    log("Items archived");
+  }else{
+    log("Failed to open archive.txt for writing");
+  }
+}
+
+void Todotxt::archiveItem(TodoItem &item) {
+  for (int i = 0; i < todoList_.size(); ++i){
+    if (todoList_[i] == item){
+      archiveItem(i);
+      return;
+    }
+  }
 }
