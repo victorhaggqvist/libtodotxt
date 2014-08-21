@@ -7,6 +7,7 @@ set(CMAKE_BUILD_TYPE Debug)
 #file(GLOB SRC . *.cpp)
 include_directories(.)
 include_directories(./lib)
+
 set(LIBSRC
     lib/todotxtmanager.h
     lib/todoitem.cpp
@@ -14,6 +15,23 @@ set(LIBSRC
     lib/todotxt.cpp
     lib/todotxt.h
 )
-add_executable(${PROJECT_NAME}_run main.cpp ${LIBSRC})
+
+set(LIBGITSRC
+    lib/todotxtgit.h
+    lib/todotxtgit.cpp
+)
+
 add_library(todotxt ${LIBSRC})
+
+if(build_gitlib)
+    message(STATUS "Building todotxt git lib")
+    include_directories(../libgit2/include)
+    add_library(todotxtgit ${LIBSRC} ${LIBGITSRC})
+    target_link_libraries(todotxtgit git2)
+endif()
+
+add_executable(${PROJECT_NAME}_run main.cpp ${LIBSRC})
+
+#FIND_LIBRARY(todotxtgit_lib todotxtgit ../libgit2/include)
+target_link_libraries(${PROJECT_NAME}_run todotxtgit)
 #target_link_libraries(${PROJECT_NAME} test)
