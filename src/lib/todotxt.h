@@ -25,6 +25,7 @@ class Todotxt : public TodotxtManager{
     void archiveDoneItems();
     void archiveItem(int index);
     void archiveItem(TodoItem& item);
+    void setEnableLogging(bool enableLogging);
 
   private:
     std::deque<TodoItem> todoList_;
@@ -32,7 +33,6 @@ class Todotxt : public TodotxtManager{
     bool enableLogging_ = false;
     void loadFile();
     void saveToFile();
-    void setEnebleLogging(bool enableLogging);
     void log(const std::string msg);
     void findDoneItems(std::deque<TodoItem> *doneItems, std::deque<TodoItem> *leftItems);
     void archiveItems(const std::deque<TodoItem> &items);

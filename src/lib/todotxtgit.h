@@ -28,11 +28,13 @@ class Todotxtgit : public TodotxtManager {
     void archiveDoneItems();
     void archiveItem(int index);
     void archiveItem(TodoItem& item);
+    void setEnableLogging(bool enableLogging);
 
   private:
     const std::string path_;
     std::shared_ptr<Todotxt> todotxt_;
     git_repository *repo_ = NULL;
+    bool enableLogging_ = false;
     void log(std::string msg);
     void commitTodoFile(TodoItem &item, std::string commitKeyword);
 };

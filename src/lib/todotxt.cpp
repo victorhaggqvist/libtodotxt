@@ -63,7 +63,7 @@ void Todotxt::saveToFile() {
   }
 }
 
-void Todotxt::setEnebleLogging(bool enableLogging) {
+void Todotxt::setEnableLogging(bool enableLogging) {
   enableLogging_ = enableLogging;
 }
 

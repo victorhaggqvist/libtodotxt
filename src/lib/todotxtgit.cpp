@@ -74,8 +74,15 @@ void Todotxtgit::archiveItem(TodoItem &item){
   todotxt_->archiveItem(item);
 }
 
+void Todotxtgit::setEnableLogging(bool enableLogging) {
+  enableLogging_ = enableLogging;
+  todotxt_->setEnableLogging(enableLogging_);
+  std::cout << "Is logging enabled: " << enableLogging_ << std::endl;
+}
+
 void Todotxtgit::log(std::string msg){
-  std::cout << msg << std::endl;
+  if (enableLogging_)
+    std::cout << msg << std::endl;
 }
 
 void Todotxtgit::commitTodoFile(TodoItem &item, std::string commitKeyword) {

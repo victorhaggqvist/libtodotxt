@@ -17,6 +17,7 @@ class TodotxtManager {
     virtual void archiveDoneItems() = 0;
     virtual void archiveItem(int index) = 0;
     virtual void archiveItem(TodoItem& item) = 0;
+    virtual void setEnableLogging(bool enableLogging) = 0;
 };
 
 }
