@@ -20,6 +20,14 @@ int main() {
   TodoItem item =  list[2];
   item.SetPriority("A");
   todo->updateItem(2, item);
+  item.SetDone(true);
+  todo->updateItem(2, item);
+  TodoItem cat = TodoItem::init("cat");
+  todo->newItem(cat);
+  todo->removeItem(1);
+  TodoItem unicorn = TodoItem::init("fluffy unicorns takes over the world kokokooooookkkkkkkkkkkkkkk");
+  todo->newItem(unicorn);
+  list = todo->getTodoList();
 
 
 //  int getIndex = 0;
