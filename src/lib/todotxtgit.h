@@ -32,15 +32,9 @@ class Todotxtgit : public TodotxtManager {
   private:
     const std::string path_;
     std::shared_ptr<Todotxt> todotxt_;
-    git_repository *repo_ = NULL; // not sure if repo member is really needed..
-    git_index *idx_ = NULL;
-    git_signature *sign_ = NULL;
-    void printGitError(int error);
-    bool addGitCommit(git_repository *repo,
-                      git_signature *sign,
-                      std::string message,
-                      std::string file);
+    git_repository *repo_ = NULL;
     void log(std::string msg);
+    void commitTodoFile(TodoItem &item, std::string commitKeyword);
 };
 
 }

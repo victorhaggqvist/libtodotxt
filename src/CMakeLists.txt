@@ -1,6 +1,6 @@
 #project(libtodotxt)
 cmake_minimum_required(VERSION 2.8)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=c++0x")
 #set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 set(CMAKE_BUILD_TYPE Debug)
 #aux_source_directory(. SRC_LIST)
@@ -19,6 +19,8 @@ set(LIBSRC
 set(LIBGITSRC
     lib/todotxtgit.h
     lib/todotxtgit.cpp
+    lib/githelper.h
+    lib/githelper.cpp
 )
 
 add_library(todotxt ${LIBSRC})
