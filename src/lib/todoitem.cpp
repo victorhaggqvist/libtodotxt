@@ -33,11 +33,12 @@ bool TodoItem::operator ==(const TodoItem &obj) {
   return this->AssembleTodo() == obj.AssembleTodo();
 }
 
-//TodoItem::TodoItem(const TodoItem &obj) :
-//  raw_line(obj.AssembleTodo())
-//{
-//  DecodeLine();
-//}
+TodoItem::TodoItem(const TodoItem &obj) :
+  raw_line(obj.AssembleTodo())
+{
+  std::cout << "=== construct copy " << raw_line << std::endl;
+  DecodeLine();
+}
 
 /**
  * Initial decoding of the todo-line

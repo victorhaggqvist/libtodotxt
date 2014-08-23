@@ -50,6 +50,7 @@ namespace Snilius {
       void SetDateCreation(std::string creationDate);
       void SetDateDone(std::string doneDate);
       void SetTodo(std::string todoLine);
+      TodoItem(const TodoItem &obj);
   };
 
 }
