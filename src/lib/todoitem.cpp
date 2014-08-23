@@ -11,13 +11,15 @@ TodoItem::TodoItem(const std::string &todo_line) :
 }
 
 TodoItem &TodoItem::operator=(const TodoItem &obj) {
-//  this->raw_line = obj.raw_line;
-  this->done_ = obj.done_;
-  this->priority_ = obj.priority_;
-  this->dateDone_ = obj.dateDone_;
-  this->dateCreation_ = obj.dateCreation_;
-  this->contexts_ = obj.contexts_;
-  this->projects_ = obj.projects_;
+  std::cout << "=== operator= " << obj.AssembleTodo() << std::endl;
+  this->done_ = false;
+  this->priority_ = "";
+  this->dateDone_ = "";
+  this->dateCreation_ = "";
+  this->contexts_ = std::vector<std::string>();
+  this->projects_ = std::vector<std::string>();
+  this->raw_line = obj.AssembleTodo();
+  this->DecodeLine();
   return *this;
 }
 
