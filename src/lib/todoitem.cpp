@@ -46,11 +46,11 @@ TodoItem::TodoItem(const TodoItem &obj) :
  */
 void TodoItem::DecodeLine() {
   done_ = IsDone();
-  if (GetPriority().length() > 0) priority_ = GetPriority();
-  if (GetDateDone().length() > 0) dateDone_ = GetDateDone();
-  if (GetDateCreation().length() > 0) dateCreation_ = GetDateCreation();
-  if (GetContexts().size()>0) contexts_ = GetContexts();
-  if (GetProjects().size()>0) projects_ = GetProjects();
+  priority_ = GetPriority();
+  dateDone_ = GetDateDone();
+  dateCreation_ = GetDateCreation();
+  contexts_ = GetContexts();
+  projects_ = GetProjects();
   todo_ = GetTodo();
 }
 
