@@ -15,7 +15,7 @@ namespace Snilius {
 class Todotxtgit : public TodotxtManager {
   public:
     Todotxtgit(std::string path);
-    ~Todotxtgit(){}
+    ~Todotxtgit();
     const std::string TODO_FILE = "todo.txt";
     const std::string TODO_FILE_W_SEPARATOR = "/" + TODO_FILE;
     const std::string ARCHIVE_FILE = "archive.txt";
