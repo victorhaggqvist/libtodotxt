@@ -177,7 +177,7 @@ void Todotxt::archiveDoneItems() {
   std::deque<TodoItem> done;
   std::deque<TodoItem> left;
   findDoneItems(&done, &left);
-  todoList_ = left;
+  todoList_.swap(left);
   archiveItems(done);
 }
 
