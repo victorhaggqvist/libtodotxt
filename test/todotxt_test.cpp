@@ -121,6 +121,9 @@ TEST(Todotxt, archiveDoneItems){
   std::string line;
   getline(arfile, line);
   ASSERT_EQ("x pony", line);
+
+  // TODO test that todo.txt file is updated as well
+  FAIL();
 }
 
 TEST(Todotxt, archiveItemIndex){
