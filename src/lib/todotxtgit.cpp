@@ -45,8 +45,8 @@ void Todotxtgit::newItem(TodoItem &item){
 }
 
 void Todotxtgit::removeItem(int index){
-  todotxt_->removeItem(index);
   TodoItem item = todotxt_->getTodoList()[index];
+  todotxt_->removeItem(index);
   commitTodoFile(item, "Remove");
 }
 
