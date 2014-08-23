@@ -41,7 +41,7 @@ bool GitHelper::gitAddCommit(git_repository *repo,
   //
   if (git_reference_name_to_id(&oid_head, repo, "HEAD") == 0) {
 
-    printf("There is parent commit\n");
+//    printf("There is parent commit\n");
 
     git_commit *prev_commit;
     rc = git_commit_lookup(&prev_commit, repo, &oid_head);
@@ -52,7 +52,7 @@ bool GitHelper::gitAddCommit(git_repository *repo,
       printGitError(rc);
 
   }else {
-    printf("No parent commit\n");
+//    printf("No parent commit\n");
   }
 
   //
@@ -73,18 +73,18 @@ bool GitHelper::gitAddCommit(git_repository *repo,
   rc = git_blob_create_fromdisk(&oid_blob, repo, filePath.c_str());
 
   if (rc == 0) { /* blob created */
-    printf("blob created\n");
+//    printf("blob created\n");
 
     rc = git_blob_lookup(&blob, repo, &oid_blob);
 
     if (rc == 0) { /* blob created and found */
-      printf("blob created and found\n");
+//      printf("blob created and found\n");
 
       if (tree_bld == NULL) // do we have a tree
         rc = git_treebuilder_create(&tree_bld, NULL);
 
       if (rc == 0) { /* a new tree builder created */
-        printf("a new tree builder created\n");
+//        printf("a new tree builder created\n");
 
         rc = git_treebuilder_insert(
                NULL,
@@ -94,17 +94,17 @@ bool GitHelper::gitAddCommit(git_repository *repo,
                GIT_FILEMODE_BLOB);
 
         if (rc == 0) { /* blob inserted in tree */
-          printf("blob inserted in tree\n");
+//          printf("blob inserted in tree\n");
 
           rc = git_treebuilder_write(&oid_tree, repo, tree_bld);
 
           if (rc == 0) { /* the tree was written to the database */
-            printf("the tree was written to the database\n");
+//            printf("the tree was written to the database\n");
 
             rc = git_tree_lookup(&tree_cmt, repo, &oid_tree);
 
             if (rc == 0) { /* we've got the tree pointer */
-              printf("we've got the tree pointer\n");
+//              printf("we've got the tree pointer\n");
 
               if (parent_commit != NULL){
                 const git_commit *parents[] = {parent_commit};
@@ -116,7 +116,7 @@ bool GitHelper::gitAddCommit(git_repository *repo,
                       tree_cmt,
                       1,                  // there will always be one parent commit
                       parents);
-                printf("Commit with parent\n");
+//                printf("Commit with parent\n");
               }else {
                 rc = git_commit_create(
                       &oid_commit, repo, "HEAD",
@@ -124,10 +124,10 @@ bool GitHelper::gitAddCommit(git_repository *repo,
                       NULL, /* default UTF-8 encoding */
                       message.c_str(),
                       tree_cmt, 0, NULL);
-                printf("First commit ie no parent\n");
+//                printf("First commit ie no parent\n");
               }
               if (rc == 0) {
-                printf("committed\n");
+//                printf("committed\n");
                 success = true;
               }
               git_tree_free(tree_cmt);
@@ -178,7 +178,7 @@ bool GitHelper::gitAddCommit(git_repository *repo,
   //
   if (git_reference_name_to_id(&oid_head, repo, "HEAD") == 0) {
 
-    printf("There is parent commit\n");
+//    printf("There is parent commit\n");
 
     git_commit *prev_commit;
     rc = git_commit_lookup(&prev_commit, repo, &oid_head);
@@ -189,7 +189,7 @@ bool GitHelper::gitAddCommit(git_repository *repo,
       printGitError(rc);
 
   }else {
-    printf("No parent commit\n");
+//    printf("No parent commit\n");
   }
 
   //
@@ -218,7 +218,7 @@ bool GitHelper::gitAddCommit(git_repository *repo,
 
 
   if (rc == 0) { /* blob created */
-    printf("blob created\n");
+//    printf("blob created\n");
 
     for (git_oid oid_blob:oid_blobs){
       git_blob *blob;
@@ -228,13 +228,13 @@ bool GitHelper::gitAddCommit(git_repository *repo,
     }
 
     if (rc == 0) { /* blob created and found */
-      printf("blob created and found\n");
+//      printf("blob created and found\n");
 
       if (tree_bld == NULL) // do we have a tree
         rc = git_treebuilder_create(&tree_bld, NULL);
 
       if (rc == 0) { /* a new tree builder created */
-        printf("a new tree builder created\n");
+//        printf("a new tree builder created\n");
 
         for (int i = 0; i < files.size(); ++i){
           git_oid oid = oid_blobs.at(i);
@@ -246,20 +246,21 @@ bool GitHelper::gitAddCommit(git_repository *repo,
                  file.c_str(),
                  &oid,
                  GIT_FILEMODE_BLOB);
+
         }
 
         if (rc == 0) { /* blob inserted in tree */
-          printf("blob inserted in tree\n");
+//          printf("blob inserted in tree\n");
 
           rc = git_treebuilder_write(&oid_tree, repo, tree_bld);
 
           if (rc == 0) { /* the tree was written to the database */
-            printf("the tree was written to the database\n");
+//            printf("the tree was written to the database\n");
 
             rc = git_tree_lookup(&tree_cmt, repo, &oid_tree);
 
             if (rc == 0) { /* we've got the tree pointer */
-              printf("we've got the tree pointer\n");
+//              printf("we've got the tree pointer\n");
 
               if (parent_commit != NULL){
                 const git_commit *parents[] = {parent_commit};
@@ -271,7 +272,7 @@ bool GitHelper::gitAddCommit(git_repository *repo,
                       tree_cmt,
                       1,                  // there will always be one parent commit
                       parents);
-                printf("Commit with parent\n");
+//                printf("Commit with parent\n");
               }else {
                 rc = git_commit_create(
                       &oid_commit, repo, "HEAD",
@@ -279,14 +280,13 @@ bool GitHelper::gitAddCommit(git_repository *repo,
                       NULL, /* default UTF-8 encoding */
                       message.c_str(),
                       tree_cmt, 0, NULL);
-                printf("First commit ie no parent\n");
+//                printf("First commit ie no parent\n");
               }
               if (rc == 0) {
-                printf("committed\n");
+//                printf("committed\n");
                 success = true;
               }
               git_tree_free(tree_cmt);
-
             }
           }
         }
