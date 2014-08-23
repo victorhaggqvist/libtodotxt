@@ -179,6 +179,7 @@ void Todotxt::archiveDoneItems() {
   findDoneItems(&done, &left);
   todoList_ = left;
   archiveItems(done);
+  saveToFile();
 }
 
 void Todotxt::archiveItem(int index) {
