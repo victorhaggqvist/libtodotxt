@@ -134,6 +134,7 @@ void Todotxt::updateItem(int index, TodoItem &item){
   TodoItem updatedItem = TodoItem::init(item.AssembleTodo());
 
   todoList_[index] = updatedItem;
+  log("Item updated");
   saveToFile();
 }
 
