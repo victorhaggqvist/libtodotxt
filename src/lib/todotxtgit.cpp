@@ -20,6 +20,10 @@ Todotxtgit::Todotxtgit(std::string path) :
   }
 }
 
+Todotxtgit::~Todotxtgit() {
+  git_repository_free(repo_);
+}
+
 std::deque<TodoItem> Todotxtgit::getTodoList() {
   return todotxt_->getTodoList();
 }
