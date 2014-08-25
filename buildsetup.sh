@@ -17,6 +17,7 @@ if [ ! -d "$GTEST2DIR" ]; then
 cd test
 echo "getting gtest"
 wget --quiet -Ogtest.zip https://googletest.googlecode.com/files/gtest-1.7.0.zip
+rm -rf gtest-1.7.0
 unzip -qq gtest.zip
 mkdir gtest
 mv gtest-1.7.0/* gtest
