@@ -1,6 +1,6 @@
 echo "pre stuffs"
 $LIBGIT2DIR="./libgit2"
-$GTESTDIR="./gtest"
+$GTESTDIR="./test/gtest"
 echo "checking for libgit2"
 if [ ! -d "$LIBGIT2DIR" ]; then
 echo "getting libgit2"
@@ -12,9 +12,9 @@ else
 echo "libgit2 exists"
 fi
 
-cd test
 echo "checking for gtest"
 if [ ! -d "$GTEST2DIR" ]; then
+cd test
 echo "getting gtest"
 wget --quiet -Ogtest.zip https://googletest.googlecode.com/files/gtest-1.7.0.zip
 unzip -qq gtest.zip
