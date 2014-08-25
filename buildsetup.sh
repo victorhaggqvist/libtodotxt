@@ -1,6 +1,7 @@
 echo "pre stuffs"
+$LIBGIT2DIR="./libgit2"
 echo "checking for libgit2"
-if [ ! -d "libgit2" ]; then
+if [ ! -d "$LIBGIT2DIR" ]; then
 echo "getting libgit2"
 git clone https://github.com/libgit2/libgit2.git
 cd libgit2
