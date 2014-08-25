@@ -1,7 +1,6 @@
 #project(libtodotxt)
 cmake_minimum_required(VERSION 2.8)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-add_definitions(-std=c++11)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -stdlib=libc++")
 #set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
 set(CMAKE_BUILD_TYPE Debug)
 #aux_source_directory(. SRC_LIST)
