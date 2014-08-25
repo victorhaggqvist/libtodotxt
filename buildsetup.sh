@@ -9,4 +9,5 @@ cd test
 rm -rf gtest-1.7.0 gtest-1.7.0.zip gtest
 wget --quiet -Ogtest.zip https://googletest.googlecode.com/files/gtest-1.7.0.zip
 unzip -qq gtest.zip
+mkdir gtest
 mv gtest-1.7.0/* gtest
