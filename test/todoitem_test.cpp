@@ -208,6 +208,19 @@ TEST(TodoItem, bakeTodo){
 
   string expected4 = "complete +libtodotxt @gh and stuff @hax";
   EXPECT_EQ(expected4, TodoItem::init(expected4).AssembleTodo());
+  
+  string foo = "foo";
+  TodoItem itm = TodoItem::init(foo);
+  ASSERT_EQ("foo", itm.AssembleTodo());
+  
+  itm.SetDateCreation("2014-08-12");
+  ASSERT_EQ("2014-08-12 foo", itm.AssembleTodo());
+
+  itm.SetDone(true);
+  itm.SetDateDone("2014-08-13");
+  ASSERT_EQ("x 2014-08-13 2014-08-12 foo", itm.AssembleTodo());
+
+  
 }
 
 TEST(TodoItem, setDoneTrue){

@@ -65,16 +65,43 @@ void Todotxtgit::archiveDoneItems(){
   std::string pathTodo = path_ + TODO_FILE_W_SEPARATOR;
   std::string pathArchive = path_ + ARCHIVE_FILE_W_SEPARATOR;
 
-//  GitHelper::gitAddFile(repo_, TODO_FILE);
-//  GitHelper::gitAddFile(repo_, ARCHIVE_FILE);
-  // TODO commit this stuff
+  GitHelper::gitAddFile(repo_, TODO_FILE);
+  GitHelper::gitAddFile(repo_, ARCHIVE_FILE);
+
+  std::vector<std::string> paths;
+  paths.push_back(pathTodo);
+  paths.push_back(pathArchive);
+  std::vector<std::string> names;
+  names.push_back(TODO_FILE);
+  names.push_back(ARCHIVE_FILE);
+
+  GitHelper::gitAddCommit(repo_, "Archiving done items", paths, names);
 }
 
-void Todotxtgit::archiveItem(int index){
-  todotxt_->archiveItem(index);
+void Todotxtgit::archiveItem(int index) {
+  TodoItem item = todotxt_->getTodoList()[index];
+  todotxt_->archiveItem(item);
+
+  std::string pathTodo = path_ + TODO_FILE_W_SEPARATOR;
+  std::string pathArchive = path_ + ARCHIVE_FILE_W_SEPARATOR;
+
+  GitHelper::gitAddFile(repo_, TODO_FILE);
+  GitHelper::gitAddFile(repo_, ARCHIVE_FILE);
+
+  std::vector<std::string> paths;
+  paths.push_back(pathTodo);
+  paths.push_back(pathArchive);
+  std::vector<std::string> names;
+  names.push_back(TODO_FILE);
+  names.push_back(ARCHIVE_FILE);
+
+  std::string assLine = item.AssembleTodo();
+  std::string elipsedLine = assLine.length()>40 ? assLine.substr(0, 40) + "..." : assLine;
+  std::string commitMsg = "Archiving: " + elipsedLine;
+  GitHelper::gitAddCommit(repo_, commitMsg, paths, names);
 }
 
-void Todotxtgit::archiveItem(TodoItem &item){
+void Todotxtgit::archiveItem(TodoItem &item) {
   todotxt_->archiveItem(item);
 }
 
@@ -82,6 +109,14 @@ void Todotxtgit::setEnableLogging(bool enableLogging) {
   enableLogging_ = enableLogging;
   todotxt_->setEnableLogging(enableLogging_);
   std::cout << "Is logging enabled: " << enableLogging_ << std::endl;
+}
+
+std::vector<std::string> Todotxtgit::getProjects() {
+  return todotxt_->getProjects();
+}
+
+std::vector<std::string> Todotxtgit::getContexts() const {
+  return todotxt_->getContexts();
 }
 
 void Todotxtgit::log(std::string msg){

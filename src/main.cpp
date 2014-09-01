@@ -16,6 +16,7 @@ int main() {
   system("bash -c 'echo a_item3 >> ./todo.txt'");
   system("bash -c 'echo a_item4 >> ./todo.txt'");
   std::shared_ptr<Todotxtgit>todo(new Todotxtgit("."));
+  todo->setEnableLogging(true);
   std::deque<TodoItem> list = todo->getTodoList();
   TodoItem item =  list[2];
   item.SetPriority("A");
@@ -27,7 +28,12 @@ int main() {
   todo->removeItem(1);
   TodoItem unicorn = TodoItem::init("fluffy unicorns takes over the world kokokooooookkkkkkkkkkkkkkk");
   todo->newItem(unicorn);
+  todo->archiveDoneItems();
   list = todo->getTodoList();
+  TodoItem it5 = list[3];
+  it5.SetDone(true);
+  todo->updateItem(3, it5);
+  todo->archiveItem(3);
 
 
 //  int getIndex = 0;

@@ -2,6 +2,8 @@
 #define TODOTXTGIT_H
 
 #include <memory>
+#include <vector>
+#include <string>
 #include "todotxtmanager.h"
 #include "todotxt.h"
 #include "todoitem.h"
@@ -29,6 +31,8 @@ class Todotxtgit : public TodotxtManager {
     void archiveItem(int index);
     void archiveItem(TodoItem& item);
     void setEnableLogging(bool enableLogging);
+    std::vector<std::string> getProjects();
+    std::vector<std::string> getContexts() const;
 
   private:
     const std::string path_;

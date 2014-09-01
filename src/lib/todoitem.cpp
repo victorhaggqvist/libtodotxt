@@ -8,10 +8,11 @@ using namespace Snilius;
 TodoItem::TodoItem(const std::string &todo_line) :
   raw_line(todo_line)
 {
+//  std::cout << "=== construct regular " << raw_line << std::endl;
 }
 
 TodoItem &TodoItem::operator=(const TodoItem &obj) {
-  std::cout << "=== operator= " << obj.AssembleTodo() << std::endl;
+//  std::cout << "=== operator= " << obj.AssembleTodo() << std::endl;
   this->done_ = false;
   this->priority_ = "";
   this->dateDone_ = "";
@@ -36,7 +37,7 @@ bool TodoItem::operator ==(const TodoItem &obj) {
 TodoItem::TodoItem(const TodoItem &obj) :
   raw_line(obj.AssembleTodo())
 {
-  std::cout << "=== construct copy " << raw_line << std::endl;
+//  std::cout << "=== construct copy " << raw_line << std::endl;
   DecodeLine();
 }
 

@@ -14,6 +14,11 @@ Todotxt::Todotxt(std::string path) :
   loadFile();
 }
 
+const char *Todotxt::todoFile() {
+  const std::string foo = "todo.txt";
+  return foo.c_str();
+}
+
 /**
  * Load todo-items from todo.txt file
  * @brief Todotxt::loadFile
@@ -67,6 +72,29 @@ void Todotxt::setEnableLogging(bool enableLogging) {
   enableLogging_ = enableLogging;
 }
 
+std::vector<std::string> Todotxt::getProjects() {
+  std::vector<std::string> projects;
+  for (TodoItem item:todoList_){
+    if (item.projects_.size()>0)
+      for (std::string p:item.projects_)
+        projects.push_back(p);
+  }
+
+  return projects;
+}
+
+std::vector<std::string> Todotxt::getContexts() const {
+  std::cout << "wee" << std::endl;
+//  contexts_.clear();
+//  for (TodoItem item:todoList_) {
+//    if (item.contexts_.size()>0)
+//      for (std::string c:item.contexts_)
+//        contexts_.push_back(c);
+//  }
+  std::cout << "wee" << std::endl;
+  return contexts_;
+}
+
 /**
  * Logg stuff
  * @brief Todotxt::log
@@ -90,27 +118,6 @@ void Todotxt::findDoneItems(std::deque<TodoItem> *doneItems, std::deque<TodoItem
       doneItems->push_back(item);
     else
       leftItems->push_back(item);
-  }
-}
-
-/**
- * Append done items to archive.txt file
- * @brief Todotxt::archiveItems
- * @param items
- */
-void Todotxt::archiveItems(const std::deque<TodoItem> &items) {
-  std::string archiveFile = path_ + ARCHIVE_FILE_W_SEPARATOR;
-
-  std::ofstream file;
-  file.open(archiveFile.c_str(), std::ofstream::out);
-  if (file.is_open()){
-    for (TodoItem item:items){
-      file << item.AssembleTodo();
-    }
-    file.close();
-    log("Items archived");
-  }else{
-    log("Failed to open archive.txt for writing");
   }
 }
 
@@ -187,15 +194,45 @@ void Todotxt::archiveItem(int index) {
   std::string archiveFile = path_ + ARCHIVE_FILE_W_SEPARATOR;
 
   std::ofstream file;
-  file.open(archiveFile.c_str(), std::ofstream::out);
+  file.open(archiveFile, std::ofstream::app);
   if (file.is_open()){
-    file << item.AssembleTodo();
+    file << item.AssembleTodo() << std ::endl;
     file.close();
     todoList_.erase(todoList_.begin()+index);
     log("Items archived");
   }else{
     log("Failed to open archive.txt for writing");
   }
+  saveToFile();
+}
+
+/**
+ * Append done items to archive.txt file
+ * @brief Todotxt::archiveItems
+ * @param items
+ */
+void Todotxt::archiveItems(const std::deque<TodoItem> &items) {
+  std::string archiveFile = path_ + ARCHIVE_FILE_W_SEPARATOR;
+
+  std::ofstream file;
+  file.open(archiveFile, std::ofstream::app);
+  if (file.is_open()){
+    for (TodoItem item:items){
+      file << item.AssembleTodo() << std ::endl;
+    }
+    file.close();
+    log("Items archived");
+  }else{
+    log("Failed to open archive.txt for writing");
+  }
+}
+
+char Todotxt::dirSeparator() {
+  #ifdef _WIN32
+    return '\\';
+  #else
+    return '/';
+  #endif
 }
 
 void Todotxt::archiveItem(TodoItem &item) {

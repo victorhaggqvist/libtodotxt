@@ -105,7 +105,7 @@ TEST(Todotxt, removeItemObject){
 }
 
 TEST(Todotxt, archiveDoneItems){
-  system("bash -c 'rm ./archive.txt'");
+  system("bash -c 'rm -f ./archive.txt'");
   system("bash -c 'echo a_item > ./todo.txt'");
   system("bash -c 'echo x pony >> ./todo.txt'");
   system("bash -c 'echo a_item_2 >> ./todo.txt'");
@@ -121,13 +121,20 @@ TEST(Todotxt, archiveDoneItems){
   std::string line;
   getline(arfile, line);
   ASSERT_EQ("x pony", line);
+  ASSERT_FALSE(getline(arfile, line));
 
-  // TODO test that todo.txt file is updated as well
-  FAIL();
+  std::ifstream tofu("./todo.txt");
+  getline(tofu, line);
+  ASSERT_EQ("a_item", line);
+  getline(tofu, line);
+  ASSERT_EQ("a_item_2", line);
+  getline(tofu, line);
+  ASSERT_EQ("unicorn", line);
+  ASSERT_FALSE(getline(tofu, line));
 }
 
 TEST(Todotxt, archiveItemIndex){
-  system("bash -c 'rm ./archive.txt'");
+  system("bash -c 'rm -f ./archive.txt'");
   system("bash -c 'echo a_item > ./todo.txt'");
   system("bash -c 'echo x pony >> ./todo.txt'");
   system("bash -c 'echo a_item_2 >> ./todo.txt'");
@@ -143,10 +150,20 @@ TEST(Todotxt, archiveItemIndex){
   std::string line;
   getline(arfile, line);
   ASSERT_EQ("x pony", line);
+  ASSERT_FALSE(getline(arfile, line));
+
+  std::ifstream tofu("./todo.txt");
+  getline(tofu, line);
+  ASSERT_EQ("a_item", line);
+  getline(tofu, line);
+  ASSERT_EQ("a_item_2", line);
+  getline(tofu, line);
+  ASSERT_EQ("unicorn", line);
+  ASSERT_FALSE(getline(tofu, line));
 }
 
 TEST(Todotxt, archiveItemObject){
-  system("bash -c 'rm ./archive.txt'");
+  system("bash -c 'rm -f ./archive.txt'");
   system("bash -c 'echo a_item > ./todo.txt'");
   system("bash -c 'echo x pony >> ./todo.txt'");
   system("bash -c 'echo a_item_2 >> ./todo.txt'");
@@ -163,5 +180,65 @@ TEST(Todotxt, archiveItemObject){
   std::string line;
   getline(arfile, line);
   ASSERT_EQ("a_item_2", line);
+  ASSERT_FALSE(getline(arfile, line));
+
+  std::ifstream tofu("./todo.txt");
+  getline(tofu, line);
+  ASSERT_EQ("a_item", line);
+  getline(tofu, line);
+  ASSERT_EQ("x pony", line);
+  getline(tofu, line);
+  ASSERT_EQ("unicorn", line);
+  ASSERT_FALSE(getline(tofu, line));
+}
+
+TEST(Todotxt, getProjects){
+  system("bash -c 'rm -f ./archive.txt'");
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  TodoItem item = TodoItem::init("stuff +foo");
+  todo->newItem(item);
+
+  std::vector<std::string> p1;
+  p1.push_back("+foo");
+
+  ASSERT_EQ(p1, todo->getProjects());
+
+  item = TodoItem::init("wodo +foo +bar");
+  todo->newItem(item);
+
+  p1.push_back("+foo");
+  p1.push_back("+bar");
+
+  ASSERT_EQ(p1, todo->getProjects());
+
+  item = TodoItem::init("+gnu");
+  todo->newItem(item);
+
+  ASSERT_EQ(p1, todo->getProjects());
+}
+
+TEST(Todotxt, getContexts){
+  system("bash -c 'rm -f ./archive.txt'");
+  std::shared_ptr<Todotxt>todo(new Todotxt("."));
+  TodoItem item = TodoItem::init("stuff @foo");
+  todo->newItem(item);
+
+  std::vector<std::string> contexts;
+  contexts.push_back("@foo");
+
+  ASSERT_EQ(contexts, todo->getContexts());
+
+  item = TodoItem::init("wodo @foo @bar");
+  todo->newItem(item);
+
+  contexts.push_back("@foo");
+  contexts.push_back("@bar");
+
+  ASSERT_EQ(contexts, todo->getContexts());
+
+  item = TodoItem::init("@gnu");
+  todo->newItem(item);
+
+  ASSERT_EQ(contexts, todo->getContexts());
 }
 
