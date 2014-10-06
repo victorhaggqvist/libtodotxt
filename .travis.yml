@@ -5,4 +5,4 @@ compiler:
 before_install:
   - ./buildsetup.sh
   
-script: make
+script: cmake && make
